@@ -8,17 +8,17 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	console.log("DOMContentLoaded");
 	disableButton.onclick = function(){
 		console.log("disableButton clicked");
-		chrome.extension.sendMessage({cmd: "setOnOffState", data: {value: !isExtensionOn}});
-		chrome.extension.sendMessage({cmd: "getOnOffState"}, function (response) {
+		chrome.runtime.sendMessage({cmd: "setOnOffState", data: {value: !isExtensionOn}});
+		chrome.runtime.sendMessage({cmd: "getOnOffState"}, function (response) {
 			update(response);
 		});
 	};
 	
-	chrome.extension.sendMessage({cmd: "getSettings"}, function (response) {
+	chrome.runtime.sendMessage({cmd: "getSettings"}, function (response) {
 		update(response);
 	});
 	
-	chrome.extension.sendMessage({cmd: "getOnOffState"}, function (response) {
+	chrome.runtime.sendMessage({cmd: "getOnOffState"}, function (response) {
 		update(response);
 	});
 	
@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		iii[i].onclick = function(){
 			var msg = {};
 			msg.cmd = this.dataset.action;
-			chrome.extension.sendMessage(msg, function (response) {});
+			chrome.runtime.sendMessage(msg, function (response) {});
 		};
 	}
 	
@@ -145,7 +145,7 @@ function updateSettings(ele){
 		
 		document.getElementById("dock").rawURL = document.getElementById("dock").rawURL.replace("&&", "&");
 		document.getElementById("dock").rawURL = document.getElementById("dock").rawURL.replace("?&", "?");
-		chrome.extension.sendMessage({cmd: "saveSetting", setting: ele.dataset.param1, "value": ele.checked}, function (response) {});
+		chrome.runtime.sendMessage({cmd: "saveSetting", setting: ele.dataset.param1, "value": ele.checked}, function (response) {});
 	} else if (ele.dataset.param2){
 		if (ele.checked){
 			document.getElementById("overlay").rawURL = updateURL(ele.dataset.param2, document.getElementById("overlay").rawURL);
@@ -155,9 +155,9 @@ function updateSettings(ele){
 		
 		document.getElementById("overlay").rawURL = document.getElementById("overlay").rawURL.replace("&&", "&");
 		document.getElementById("overlay").rawURL = document.getElementById("overlay").rawURL.replace("?&", "?");
-		chrome.extension.sendMessage({cmd: "saveSetting", setting: ele.dataset.param2, "value": ele.checked}, function (response) {});
+		chrome.runtime.sendMessage({cmd: "saveSetting", setting: ele.dataset.param2, "value": ele.checked}, function (response) {});
 	} else if (ele.dataset.setting){
-		chrome.extension.sendMessage({cmd: "saveSetting", setting: ele.dataset.setting, "value": ele.checked}, function (response) {});
+		chrome.runtime.sendMessage({cmd: "saveSetting", setting: ele.dataset.setting, "value": ele.checked}, function (response) {});
 		return;
 	}
 	
